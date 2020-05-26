@@ -1,0 +1,10 @@
+bin/
+obj/
+packages/
+/**/*.csproj.user
+.vs
+blackduck/
+BlackduckNugetInspector/nupkg/
+.DS_Store
+
+
