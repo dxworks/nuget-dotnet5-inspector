@@ -1,5 +1,5 @@
-﻿using Com.Synopsys.Integration.Nuget.DependencyResolution.Nuget;
-using Com.Synopsys.Integration.Nuget.Model;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Model;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Exceptions;
 using System;

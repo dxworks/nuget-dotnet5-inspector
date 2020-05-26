@@ -1,4 +1,4 @@
-﻿using Com.Synopsys.Integration.Nuget.DependencyResolution.Nuget;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget;
 using System;
 using System.Collections.Generic;
 using System.Text;

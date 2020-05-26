@@ -1,8 +1,8 @@
-﻿using Com.Synopsys.Integration.Nuget.Configuration;
-using Com.Synopsys.Integration.Nuget.DependencyResolution.Nuget;
-using Com.Synopsys.Integration.Nuget.Inspection.Dispatch;
-using Com.Synopsys.Integration.Nuget.Inspection.Model;
-using Com.Synopsys.Integration.Nuget.Inspection.Writer;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.Configuration;
+using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Writer;
 using Mono.Options;
 using System;
 using System.Collections.Generic;

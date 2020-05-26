@@ -1,7 +1,7 @@
-﻿using Com.Synopsys.Integration.Nuget.Inspection.Dispatch;
-using Com.Synopsys.Integration.Nuget.Inspection.Model;
-using Com.Synopsys.Integration.Nuget.Inspection.Writer;
-using Com.Synopsys.Integration.Nuget.Runner;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Writer;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Runner;
 using Microsoft.Build.Locator;
 using System;
 

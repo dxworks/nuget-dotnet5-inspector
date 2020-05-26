@@ -1,4 +1,4 @@
-﻿using Com.Synopsys.Integration.Nuget.Configuration;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.Configuration;
 using Mono.Options;
 using System;
 using System.Collections.Generic;

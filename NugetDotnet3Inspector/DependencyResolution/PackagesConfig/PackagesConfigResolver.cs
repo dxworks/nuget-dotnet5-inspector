@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Com.Synopsys.Integration.Nuget.DependencyResolution.Nuget;
+using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget;
 using NuGet.Packaging;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.PackagesConfig

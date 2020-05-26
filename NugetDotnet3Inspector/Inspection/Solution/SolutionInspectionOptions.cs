@@ -1,4 +1,4 @@
-﻿using Com.Synopsys.Integration.Nuget.Inspection.Model;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,6 +1,6 @@
-﻿using Com.Synopsys.Integration.Nuget.Inspection.Model;
-using Com.Synopsys.Integration.Nuget.Inspection.Util;
-using Com.Synopsys.Integration.Nuget.Model;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Util;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -1,15 +1,15 @@
-﻿using Com.Synopsys.Integration.Nuget.DependencyResolution.Nuget;
+﻿using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Com.Synopsys.Integration.Nuget.Inspection.Model;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
 using System.IO;
-using Com.Synopsys.Integration.Nuget.Inspection.Util;
-using Com.Synopsys.Integration.Nuget.Model;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Util;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Model;
 using System.Diagnostics;
 using System.Linq;
-using Com.Synopsys.Integration.Nuget.Inspection.Project;
-using Com.Synopsys.Integration.Nuget.Inspection.Exceptions;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Exceptions;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Solution
 {
