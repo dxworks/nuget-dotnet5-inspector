@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Com.Synopsys.Integration.Nuget.Dotnet3</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Com.Synopsys.Integration.Nuget.Dotnet5</RootNamespace>
 
     <PackageOutputPath>./nupkg</PackageOutputPath>
 
@@ -17,6 +17,12 @@
     <FileVersion>1.0.1.0</FileVersion>
 
     <DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
+
+    <PackageId>NugetDotnet5Inspector</PackageId>
+
+    <Product>NugetDotnet5Inspector</Product>
+
+    <AssemblyName>NugetDotnet5Inspector</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
