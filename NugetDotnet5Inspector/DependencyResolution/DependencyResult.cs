@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution
 {
-    class DependencyResult
+    public class DependencyResult
     {
         public bool Success { get; set; } = true;
         public string ProjectVersion { get; set; } = null;
