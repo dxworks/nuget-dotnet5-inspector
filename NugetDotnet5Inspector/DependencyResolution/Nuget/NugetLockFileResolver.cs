@@ -162,20 +162,20 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget
             //With some hints from https://github.com/dotnet/NuGet.BuildTasks/pull/23/files
             if (ParseProjectFileDependencyGroupTokens(projectFileDependency, " >= ", out String projectName, out String versionRaw))
             {
-                return new ProjectFileDependency(projectName, MinVersionOrFloat(versionRaw.Trim(), true /* Include min version. */));
+                return new ProjectFileDependency(projectName, MinVersionOrFloat(versionRaw, true /* Include min version. */));
             }
             else if (ParseProjectFileDependencyGroupTokens(projectFileDependency, " > ", out String projectName2, out String versionRaw2))
             {
-                return new ProjectFileDependency(projectName2, MinVersionOrFloat(versionRaw2.Trim(), false /* Do not include min version. */));
+                return new ProjectFileDependency(projectName2, MinVersionOrFloat(versionRaw2, false /* Do not include min version. */));
             }
             else if (ParseProjectFileDependencyGroupTokens(projectFileDependency, " <= ", out String projectName3, out String versionRaw3))
             {
-                var maxVersion = NuGet.Versioning.NuGetVersion.Parse(versionRaw3.Trim());
+                var maxVersion = NuGet.Versioning.NuGetVersion.Parse(versionRaw3);
                 return new ProjectFileDependency(projectName3, new NuGet.Versioning.VersionRange(null, false, maxVersion, true /* Include Max */));
             }
             else if (ParseProjectFileDependencyGroupTokens(projectFileDependency, " < ", out String projectName4, out String versionRaw4))
             {
-                var maxVersion = NuGet.Versioning.NuGetVersion.Parse(versionRaw4.Trim());
+                var maxVersion = NuGet.Versioning.NuGetVersion.Parse(versionRaw4);
                 return new ProjectFileDependency(projectName4, new NuGet.Versioning.VersionRange(null, false, maxVersion, false /* Do NOT Include Max */));
             }
             throw new Exception("Unable to parse project file dependency group, please contact support: " + projectFileDependency);

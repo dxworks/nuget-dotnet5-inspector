@@ -71,7 +71,6 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Solution
             Console.WriteLine("Processing Solution: " + Options.TargetPath);
             var stopwatch = Stopwatch.StartNew();
             Container solution = new Container();
-            solution.FilterableName = Options.SolutionName;
             solution.Name = Options.SolutionName;
             solution.SourcePath = Options.TargetPath;
             solution.Type = "Solution";
