@@ -71,6 +71,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Solution
             Console.WriteLine("Processing Solution: " + Options.TargetPath);
             var stopwatch = Stopwatch.StartNew();
             Container solution = new Container();
+            solution.FilterableName = Options.SolutionName;
             solution.Name = Options.SolutionName;
             solution.SourcePath = Options.TargetPath;
             solution.Type = "Solution";
@@ -101,10 +102,11 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Solution
                             string projectRelativePath = project.Path;
                             string projectPath = PathUtil.Combine(solutionDirectory, projectRelativePath);
                             string projectName = project.Name;
-                            if (duplicateNames.Contains(projectName))
+                            string projectId = projectName;
+                            if (duplicateNames.Contains(projectId))
                             {
-                                Console.WriteLine($"Duplicate project name '{projectName}' found. Using GUID instead.");
-                                projectName = project.GUID;
+                                Console.WriteLine($"Duplicate project name '{projectId}' found. Using GUID instead.");
+                                projectId = project.GUID;
                             }
                             Boolean projectFileExists = false;
                             try
@@ -126,6 +128,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Solution
                             ProjectInspector projectInspector = new ProjectInspector(new ProjectInspectionOptions(Options)
                             {
                                 ProjectName = projectName,
+                                ProjectUniqueId = projectId,
                                 TargetPath = projectPath
                             }, NugetService);
 
