@@ -14,7 +14,6 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch
     //Given a generic InspectionOptions, InspectorDispatch is responsible for instantiating the correct Inspector (Project or Solution)
     class InspectorDispatch
     {
-        
         public InspectorDispatch()
         {
         }
@@ -30,9 +29,10 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch
             if (Directory.Exists(options.TargetPath))
             {
                 Console.WriteLine("Searching for solution files to process...");
-                string[] solutionPaths = Directory.GetFiles(options.TargetPath, "*.sln");
+                var solutionPaths = Directory.GetFiles(options.TargetPath, "*.sln", SearchOption.AllDirectories)
+                    .ToHashSet();
 
-                if (solutionPaths != null && solutionPaths.Length >= 1)
+                if (solutionPaths is { Count: >= 1 })
                 {
                     foreach (var solution in solutionPaths)
                     {
@@ -41,25 +41,20 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch
                         solutionOp.TargetPath = solution;
                         inspectors.Add(new SolutionInspector(solutionOp, nugetService));
                     }
-
                 }
-                else
+
+                Console.WriteLine("No Solution file found.  Searching for a project file...");
+                string[] projectPaths = SupportedProjectPatterns.AsList
+                    .SelectMany(pattern => Directory.GetFiles(options.TargetPath, pattern, SearchOption.AllDirectories))
+                    .Distinct().ToArray();
+                if (projectPaths is { Length: > 0 })
                 {
-                    Console.WriteLine("No Solution file found.  Searching for a project file...");
-                    string[] projectPaths = SupportedProjectPatterns.AsList.SelectMany(pattern => Directory.GetFiles(options.TargetPath, pattern)).Distinct().ToArray();
-                    if (projectPaths != null && projectPaths.Length > 0)
+                    foreach (var projectPath in projectPaths)
                     {
-                        foreach (var projectPath in projectPaths)
-                        {
-                            Console.WriteLine("Found project {0}", projectPath);
-                            var projectOp = new ProjectInspectionOptions(options);
-                            projectOp.TargetPath = projectPath;
-                            inspectors.Add(new ProjectInspector(projectOp, nugetService));
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No Project file found. Finished.");
+                        Console.WriteLine("Found project {0}", projectPath);
+                        var projectOp = new ProjectInspectionOptions(options);
+                        projectOp.TargetPath = projectPath;
+                        inspectors.Add(new ProjectInspector(projectOp, nugetService));
                     }
                 }
             }
