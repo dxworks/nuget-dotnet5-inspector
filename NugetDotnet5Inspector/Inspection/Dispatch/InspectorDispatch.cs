@@ -42,19 +42,24 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch
                         inspectors.Add(new SolutionInspector(solutionOp, nugetService));
                     }
                 }
-
-                Console.WriteLine("No Solution file found.  Searching for a project file...");
-                string[] projectPaths = SupportedProjectPatterns.AsList
-                    .SelectMany(pattern => Directory.GetFiles(options.TargetPath, pattern, SearchOption.AllDirectories))
-                    .Distinct().ToArray();
-                if (projectPaths is { Length: > 0 })
+                else
                 {
-                    foreach (var projectPath in projectPaths)
+
+
+                    Console.WriteLine("No Solution file found.  Searching for a project file...");
+                    string[] projectPaths = SupportedProjectPatterns.AsList
+                        .SelectMany(pattern =>
+                            Directory.GetFiles(options.TargetPath, pattern, SearchOption.AllDirectories))
+                        .Distinct().ToArray();
+                    if (projectPaths is {Length: > 0})
                     {
-                        Console.WriteLine("Found project {0}", projectPath);
-                        var projectOp = new ProjectInspectionOptions(options);
-                        projectOp.TargetPath = projectPath;
-                        inspectors.Add(new ProjectInspector(projectOp, nugetService));
+                        foreach (var projectPath in projectPaths)
+                        {
+                            Console.WriteLine("Found project {0}", projectPath);
+                            var projectOp = new ProjectInspectionOptions(options);
+                            projectOp.TargetPath = projectPath;
+                            inspectors.Add(new ProjectInspector(projectOp, nugetService));
+                        }
                     }
                 }
             }

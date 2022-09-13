@@ -9,6 +9,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Model
         public string Name { get; set; }
         public string Version { get; set; }
         public string Type { get; set; } = "Solution";
+        public string InspectedWith { get; set; }
         public string SourcePath { get; set; }
         public List<string> OutputPaths { get; set; } = new List<string>();
         public List<PackageSet> Packages { get; set; } = new List<PackageSet>();

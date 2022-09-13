@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using NuGet.Frameworks;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
 {
@@ -13,11 +14,13 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
 
         private string ProjectPath;
         private NugetSearchService NugetSearchService;
+        private readonly NuGetFramework ProjectTargetFramework;
 
-        public ProjectXmlResolver(string projectPath, NugetSearchService nugetSearchService)
+        public ProjectXmlResolver(string projectPath, NugetSearchService nugetSearchService, NuGetFramework projectTargetFramework)
         {
             ProjectPath = projectPath;
             NugetSearchService = nugetSearchService;
+            ProjectTargetFramework = projectTargetFramework;
         }
 
         public DependencyResult Process()
@@ -84,7 +87,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
                         XmlAttribute version = attributes["Version"];
                         if (include != null && version != null)
                         {
-                            var dep = new NugetDependency(include.Value, NuGet.Versioning.VersionRange.Parse(version.Value));
+                            var dep = new NugetDependency(include.Value, NuGet.Versioning.VersionRange.Parse(version.Value), ProjectTargetFramework);
                             tree.Add(dep);
                         }
                     }

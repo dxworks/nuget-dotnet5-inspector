@@ -1,18 +1,16 @@
-﻿using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
+﻿using System;
+using System.IO;
+using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
 using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Util;
 using Com.Synopsys.Integration.Nuget.Dotnet3.Model;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Writer
 {
-    class InspectionResultJsonWriter
+    internal class InspectionResultJsonWriter
     {
-        private InspectionResult Result;
-        private InspectionOutput InspectionOutput;
+        private readonly InspectionOutput InspectionOutput;
+        private readonly InspectionResult Result;
 
         public InspectionResultJsonWriter(InspectionResult result)
         {
@@ -26,6 +24,11 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Writer
             return PathUtil.Combine(Result.OutputDirectory, Result.ResultName + "_inspection.json");
         }
 
+        private static bool IsFolderPath(string fileOrFolderPath)
+        {
+            return !Path.HasExtension(fileOrFolderPath);
+        }
+
         public void Write()
         {
             Write(Result.OutputDirectory);
@@ -33,12 +36,20 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Writer
 
         public void Write(string outputDirectory)
         {
-            Write(outputDirectory, FilePath());
+            if (IsFolderPath(Result.OutputDirectory))
+                Write(outputDirectory, FilePath());
+            else
+                Write(GetDirectoryFromFilePath(outputDirectory), outputDirectory);
+        }
+
+        private static string GetDirectoryFromFilePath(string filePath)
+        {
+            var directoryName = Path.GetDirectoryName(filePath);
+            return directoryName;
         }
 
         public void Write(string outputDirectory, string outputFilePath)
         {
-
             if (outputDirectory == null)
             {
                 Console.WriteLine("Could not create output directory: " + outputDirectory);
@@ -54,14 +65,13 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Writer
             {
                 using (var sw = new StreamWriter(fs))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     serializer.NullValueHandling = NullValueHandling.Ignore;
-                    JsonTextWriter writer = new JsonTextWriter(sw);
+                    var writer = new JsonTextWriter(sw);
                     serializer.Formatting = Formatting.Indented;
                     serializer.Serialize(writer, InspectionOutput);
                 }
             }
         }
-
     }
 }

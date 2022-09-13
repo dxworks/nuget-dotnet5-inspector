@@ -7,9 +7,12 @@ using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Model;
 using Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Util;
 using Com.Synopsys.Integration.Nuget.Dotnet3.Model;
 using System.Diagnostics;
+using System.Linq;
 using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.PackagesConfig;
 using Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using NuGet.Frameworks;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
 {
@@ -65,6 +68,12 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
             if (String.IsNullOrWhiteSpace(Options.VersionName))
             {
                 Options.VersionName = InspectorUtil.GetProjectAssemblyVersion(Options.ProjectDirectory);
+            }
+
+            if (String.IsNullOrWhiteSpace(Options.OutputDirectory))
+            {
+                string currentDirectory = Directory.GetCurrentDirectory();
+                Options.OutputDirectory = PathUtil.Combine(currentDirectory, InspectorUtil.DEFAULT_OUTPUT_DIRECTORY);
             }
         }
 
@@ -134,6 +143,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
                 projectNode.SourcePath = Options.TargetPath;
                 projectNode.Type = "Project";
 
+                var projectTargetFramework = ParseTargetFramework();
                 try
                 {
                     projectNode.OutputPaths = FindOutputPaths();
@@ -155,6 +165,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
                     var packagesConfigResult = packagesConfigResolver.Process();
                     projectNode.Packages = packagesConfigResult.Packages;
                     projectNode.Dependencies = packagesConfigResult.Dependencies;
+                    projectNode.InspectedWith = typeof(PackagesConfigResolver).ToString();
                 }
                 else if (projectJsonLockExists)
                 {
@@ -163,6 +174,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
                     var projectJsonLockResult = projectJsonLockResolver.Process();
                     projectNode.Packages = projectJsonLockResult.Packages;
                     projectNode.Dependencies = projectJsonLockResult.Dependencies;
+                    projectNode.InspectedWith = typeof(ProjectLockJsonResolver).ToString();
                 }
                 else if (projectAssetsJsonExists)
                 {
@@ -171,6 +183,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
                     var projectAssetsJsonResult = projectAssetsJsonResolver.Process();
                     projectNode.Packages = projectAssetsJsonResult.Packages;
                     projectNode.Dependencies = projectAssetsJsonResult.Dependencies;
+                    projectNode.InspectedWith = typeof(ProjectAssetsJsonResolver).ToString();
                 }
                 else if (projectJsonExists)
                 {
@@ -179,26 +192,29 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
                     var projectJsonResult = projectJsonResolver.Process();
                     projectNode.Packages = projectJsonResult.Packages;
                     projectNode.Dependencies = projectJsonResult.Dependencies;
+                    projectNode.InspectedWith = typeof(ProjectJsonResolver).ToString();
                 }
                 else
                 {
                     Console.WriteLine("Attempting reference resolver: " + Options.TargetPath);
-                    var referenceResolver = new ProjectReferenceResolver(Options.TargetPath, NugetService);
+                    var referenceResolver = new ProjectReferenceResolver(Options.TargetPath, NugetService, projectTargetFramework);
                     var projectReferencesResult = referenceResolver.Process();
                     if (projectReferencesResult.Success)
                     {
                         Console.WriteLine("Reference resolver succeeded.");
                         projectNode.Packages = projectReferencesResult.Packages;
                         projectNode.Dependencies = projectReferencesResult.Dependencies;
+                        projectNode.InspectedWith = typeof(ProjectReferenceResolver).ToString();
                     }
                     else
                     {
                         Console.WriteLine("Using backup XML resolver.");
-                        var xmlResolver = new ProjectXmlResolver(Options.TargetPath, NugetService);
+                        var xmlResolver = new ProjectXmlResolver(Options.TargetPath, NugetService, projectTargetFramework);
                         var xmlResult = xmlResolver.Process();
                         projectNode.Version = xmlResult.ProjectVersion;
                         projectNode.Packages = xmlResult.Packages;
                         projectNode.Dependencies = xmlResult.Dependencies;
+                        projectNode.InspectedWith = typeof(ProjectXmlResolver).ToString();
                     }
                 }
 
@@ -212,6 +228,30 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
             }
         }
 
+        private NuGetFramework ParseTargetFramework()
+        {
+            string targetFramework = ExtractTargetFramework(Options.TargetPath);
+            var projectTargetFramework = NuGetFramework.ParseFolder(targetFramework);
+            return projectTargetFramework;
+        }
+
+        private static string ExtractTargetFramework(string optionsTargetPath)
+        {
+            var targetFrameworkNodeNames = new string[]
+                {"TargetFrameworkVersion", "TargetFramework", "TargetFrameworks"}.Select(x => x.ToLowerInvariant());
+
+            var csProj = XElement.Load(optionsTargetPath);
+            var targetFrameworks = csProj.Descendants().Where(e => targetFrameworkNodeNames.Contains(e.Name.LocalName.ToLowerInvariant())).ToList();
+
+            if (!targetFrameworks.Any())
+            {
+                return string.Empty;
+            }
+
+            Console.WriteLine("Found the following TargetFramework(s): {0}", string.Join(Environment.NewLine, targetFrameworks));
+
+            return targetFrameworks.First().Value;
+        }
 
         public List<String> FindOutputPaths()
         {
