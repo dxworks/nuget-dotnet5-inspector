@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - 'v*-depinder'
-      - '!*-voyager'
 
 jobs:
   build-and-publish:
@@ -22,7 +21,7 @@ jobs:
         id: semver_parser
         run: |
           semver=${TAG#"refs/tags/v"}
-          semver=${semver%"-voyager"}
+          semver=${semver%"-depinder"}
 
           echo ::set-output name=semver::$semver
         env:
