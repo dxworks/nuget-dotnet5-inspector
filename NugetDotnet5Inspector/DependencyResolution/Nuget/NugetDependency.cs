@@ -29,7 +29,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Nuget
         public Model.PackageSet ToEmptyPackageSet()
         {
             var packageSet = new Model.PackageSet();
-            packageSet.PackageId = new Model.PackageId(Name, VersionRange.MinVersion.ToNormalizedString());
+            packageSet.PackageId = new Model.PackageId(Name, VersionRange.MinVersion.ToNormalizedString(), Framework.ToString());
             return packageSet;
         }
     }

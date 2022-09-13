@@ -74,6 +74,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Solution
             solution.Name = Options.SolutionName;
             solution.SourcePath = Options.TargetPath;
             solution.Type = "Solution";
+            solution.InspectedWith = typeof(SolutionInspector).ToString();
             try
             {
 
