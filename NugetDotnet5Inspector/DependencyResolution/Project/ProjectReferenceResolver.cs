@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NuGet.Frameworks;
 
 namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
 {
@@ -14,10 +15,13 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
 
         private string ProjectPath;
         private NugetSearchService NugetSearchService;
-        public ProjectReferenceResolver(string projectPath, NugetSearchService nugetSearchService)
+        private readonly NuGetFramework ProjectTargetFramework;
+
+        public ProjectReferenceResolver(string projectPath, NugetSearchService nugetSearchService, NuGetFramework projectTargetFramework)
         {
             ProjectPath = projectPath;
             NugetSearchService = nugetSearchService;
+            ProjectTargetFramework = projectTargetFramework;
         }
 
         public DependencyResult Process()
@@ -35,7 +39,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
                     NuGet.Versioning.VersionRange version;
                     if (NuGet.Versioning.VersionRange.TryParse(versionMetaData, out version))
                     {
-                        var dep = new NugetDependency(reference.EvaluatedInclude, version);
+                        var dep = new NugetDependency(reference.EvaluatedInclude, version, ProjectTargetFramework);
                         deps.Add(dep);
                     } else
                     {
@@ -69,7 +73,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
                             version = packageInfoAfterVersionKey;
                         }
 
-                        var dep = new NugetDependency(artifact, NuGet.Versioning.VersionRange.Parse(version));
+                        var dep = new NugetDependency(artifact, NuGet.Versioning.VersionRange.Parse(version), ProjectTargetFramework);
                         deps.Add(dep);
                     }
                 }
