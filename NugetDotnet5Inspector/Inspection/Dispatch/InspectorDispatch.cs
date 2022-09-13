@@ -44,8 +44,6 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Dispatch
                 }
                 else
                 {
-
-
                     Console.WriteLine("No Solution file found.  Searching for a project file...");
                     string[] projectPaths = SupportedProjectPatterns.AsList
                         .SelectMany(pattern =>
