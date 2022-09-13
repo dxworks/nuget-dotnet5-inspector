@@ -245,7 +245,13 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.Inspection.Project
 
             if (!targetFrameworks.Any())
             {
+                Console.WriteLine("Warning - Target Framework: Could not extract a target framework for " + optionsTargetPath);
                 return string.Empty;
+            }
+
+            if (targetFrameworks.Count > 1)
+            {
+                Console.WriteLine("Warning - Target Framework: Found multiple target frameworks for " + optionsTargetPath);
             }
 
             Console.WriteLine("Found the following TargetFramework(s): {0}", string.Join(Environment.NewLine, targetFrameworks));
