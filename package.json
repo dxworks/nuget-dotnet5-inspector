@@ -1,0 +1,45 @@
+{
+  "name": "@dxworks/nuget-inspector",
+  "version": "1.2.0",
+  "description": "Adaptation of the BlackDuck Nuget Dotnet 5 Inspector",
+  "keywords": [
+    "Nuget",
+    "Inspector",
+    "dependencies",
+    "balckduck",
+    "software-composition"
+  ],
+  "homepage": "https://github.com/dxworks/nuget-dotnet5-inspector#readme",
+  "bugs": {
+    "url": "https://github.com/dxworks/nuget-dotnet5-inspector/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dxworks/nuget-dotnet5-inspector.git"
+  },
+  "license": "MIT",
+  "author": "Mario Rivis",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "bin": {
+    "nuget-inspector": "src/nuget-inspector.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cli-progress": "^3.9.1",
+    "unzipper": "^0.10.11"
+  },
+  "devDependencies": {
+    "json": "^11.0.0",
+    "sort-package-json": "^1.52.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
+  }
+}

@@ -8,3 +8,5 @@ BlackduckNugetInspector/nupkg/
 .DS_Store
 
 .idea
+node_modules
+results
