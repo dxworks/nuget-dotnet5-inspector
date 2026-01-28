@@ -1,6 +1,6 @@
 {
   "name": "@dxworks/nuget-inspector",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Adaptation of the BlackDuck Nuget Dotnet 5 Inspector",
   "keywords": [
     "Nuget",
@@ -30,7 +30,7 @@
     "lib"
   ],
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^1.7.4",
     "cli-progress": "^3.9.1",
     "unzipper": "^0.10.11"
   },
