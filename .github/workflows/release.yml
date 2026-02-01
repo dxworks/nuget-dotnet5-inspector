@@ -46,9 +46,9 @@ jobs:
         run: zip -r nuget-inspector-${{ matrix.os }}.zip nuget-inspector
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v6
         with:
-          name: nuget-inspector-${{ matrix.os }}.zip
+          name: nuget-inspector-${{ matrix.os }}
           path: nuget-inspector-${{ matrix.os }}.zip
 
   release-and-upload:
@@ -69,7 +69,9 @@ jobs:
           TAG: ${{ github.ref }}
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
+        with:
+          merge-multiple: true
 
       - name: List all downloads
         run: |
@@ -91,9 +93,9 @@ jobs:
           fail_on_unmatched_files: true
           generate_release_notes: true
           files: |
-            ./nuget-inspector-win.zip/nuget-inspector-win.zip
-            ./nuget-inspector-linux.zip/nuget-inspector-linux.zip
-            ./nuget-inspector-osx.zip/nuget-inspector-osx.zip
+            ./nuget-inspector-win.zip
+            ./nuget-inspector-linux.zip
+            ./nuget-inspector-osx.zip
 
   npm-publish:
     name: Publish Npm Package
