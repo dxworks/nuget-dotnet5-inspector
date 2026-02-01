@@ -1,6 +1,6 @@
 {
   "name": "@dxworks/nuget-inspector",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "Adaptation of the BlackDuck Nuget Dotnet 5 Inspector",
   "keywords": [
     "Nuget",
@@ -24,7 +24,7 @@
     "doc": "docs"
   },
   "bin": {
-    "nuget-inspector": "src/nuget-inspector.js"
+    "nuget-inspector": "lib/nuget-inspector.js"
   },
   "files": [
     "lib"

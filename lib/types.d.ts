@@ -1,2 +1,7 @@
-export function runNugetInspector(options: any): Promise<void>;
-export function runNuGetInspectorProgrammatically(targetPath: any, outputDirectory: any, cwd: any): Promise<void>;
+export interface RunNugetInspectorOptions {
+    args?: string[];
+    workingDirectory?: string;
+}
+
+export function runNugetInspector(options?: RunNugetInspectorOptions): Promise<void>;
+export function runNuGetInspectorProgrammatically(targetPath: string, outputDirectory: string, cwd?: string): Promise<string>;
