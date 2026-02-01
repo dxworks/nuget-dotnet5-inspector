@@ -15,19 +15,18 @@ jobs:
         os: [win, linux, osx]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: Extract Semver
         id: semver_parser
         run: |
           semver=${TAG#"refs/tags/v"}
           semver=${semver%"-depinder"}
-
-          echo ::set-output name=semver::$semver
+          echo "semver=$semver" >> $GITHUB_OUTPUT
         env:
           TAG: ${{ github.ref }}
 
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '6.0.x'
 
@@ -58,20 +57,19 @@ jobs:
     needs: build-and-publish
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: Extract Semver
         id: semver_parser
         run: |
           semver=${TAG#"refs/tags/v"}
-          semver=${semver%"-voyager"}
-
-          echo ::set-output name=semver::$semver
+          semver=${semver%"-depinder"}
+          echo "semver=$semver" >> $GITHUB_OUTPUT
         env:
           TAG: ${{ github.ref }}
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
 
       - name: List all downloads
         run: |
@@ -97,44 +95,39 @@ jobs:
             ./nuget-inspector-linux.zip/nuget-inspector-linux.zip
             ./nuget-inspector-osx.zip/nuget-inspector-osx.zip
 
-#  npm-publish:
-#    name: Publish Npm Package
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: write
-#      packages: write
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Setup Node
-#        uses: actions/setup-node@v2
-#        with:
-#          node-version: '16.x'
-#          cache: 'npm'
-#          registry-url: 'https://npm.pkg.github.com'
-#          scope: '@dxworks'
-#
-#      - name: Prepare Node Dependencies
-#        run: npm install
-#
-#      - name: Extract Semver
-#        id: semver_parser
-#        run: |
-#          semver=${TAG#"refs/tags/v"}
-#          semver=${semver%"-voyager"}
-#
-#          echo ::set-output name=semver::$semver
-#        env:
-#          TAG: ${{ github.ref }}
-#
-#      - name: Setup Version
-#        run: node_modules/.bin/json -I -f package.json -e "this.version='$VERSION'"
-#        env:
-#          VERSION: ${{ steps.semver_parser.outputs.semver }}
-#
-#      - name: Publish NPM
-#        run: npm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  npm-publish:
+    name: Publish Npm Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+
+      - name: Prepare Node Dependencies
+        run: npm install
+
+      - name: Extract Semver
+        id: semver_parser
+        run: |
+          semver=${TAG#"refs/tags/v"}
+          echo "semver=$semver" >> $GITHUB_OUTPUT
+        env:
+          TAG: ${{ github.ref }}
+
+      - name: Setup Version
+        run: node_modules/.bin/json -I -f package.json -e "this.version='$VERSION'"
+        env:
+          VERSION: ${{ steps.semver_parser.outputs.semver }}
+
+      - name: Publish on NPM
+        run: npm publish --access public

@@ -93,7 +93,7 @@ namespace Com.Synopsys.Integration.Nuget.Dotnet3.DependencyResolution.Project
 
                 foreach (var package in result.Packages)
                 {
-                    var anyPackageReferences = result.Packages.Where(pkg => pkg.Dependencies.Contains(package.PackageId)).Any();
+                    var anyPackageReferences = result.Packages.Any(pkg => pkg.Dependencies.Contains(package.PackageId));
                     if (!anyPackageReferences)
                     {
                         result.Dependencies.Add(package.PackageId);

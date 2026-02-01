@@ -19,27 +19,23 @@
   },
   "license": "MIT",
   "author": "Mario Rivis",
-  "main": "index.js",
+  "main": "lib/index.js",
   "directories": {
     "doc": "docs"
   },
   "bin": {
-    "nuget-inspector": "src/nuget-inspector.js"
+    "nuget-inspector": "lib/nuget-inspector.js"
   },
   "files": [
     "lib"
   ],
+  "types": "lib/types.d.ts",
   "dependencies": {
     "axios": "^1.7.4",
     "cli-progress": "^3.9.1",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
-    "json": "^11.0.0",
-    "sort-package-json": "^1.52.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "json": "^11.0.0"
   }
 }
