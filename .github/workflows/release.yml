@@ -22,8 +22,7 @@ jobs:
         run: |
           semver=${TAG#"refs/tags/v"}
           semver=${semver%"-depinder"}
-
-          echo ::set-output name=semver::$semver
+          echo "semver=$semver" >> $GITHUB_OUTPUT
         env:
           TAG: ${{ github.ref }}
 
@@ -58,20 +57,19 @@ jobs:
     needs: build-and-publish
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: Extract Semver
         id: semver_parser
         run: |
           semver=${TAG#"refs/tags/v"}
-          semver=${semver%"-voyager"}
-
-          echo ::set-output name=semver::$semver
+          semver=${semver%"-depinder"}
+          echo "semver=$semver" >> $GITHUB_OUTPUT
         env:
           TAG: ${{ github.ref }}
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
 
       - name: List all downloads
         run: |
@@ -103,18 +101,17 @@ jobs:
     permissions:
       contents: write
       packages: write
+      id-token: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: '24.x'
           cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@dxworks'
 
       - name: Prepare Node Dependencies
         run: npm install
@@ -123,8 +120,7 @@ jobs:
         id: semver_parser
         run: |
           semver=${TAG#"refs/tags/v"}
-
-          echo ::set-output name=semver::$semver
+          echo "semver=$semver" >> $GITHUB_OUTPUT
         env:
           TAG: ${{ github.ref }}
 
@@ -133,20 +129,5 @@ jobs:
         env:
           VERSION: ${{ steps.semver_parser.outputs.semver }}
 
-      - name: Publish NPM
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node with NPM Package Registry
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@dxworks'
-
       - name: Publish on NPM
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
